@@ -11,7 +11,7 @@ I originally used the https://github.com/vert-x3/vertx-service-proxy but got fru
 1. Not being able to handle failures nicely, i.e. The generated class always returned -1 in the fail(), meaning I had to define my own templates
 
 
-So taking inspriation from various client proxies from the web services, the code utilises java.lang.reflect.Proxy to implement the client and reflection to implement the server part of the service.
+So taking inspriation from various client proxies from web service libraries, the code utilises java.lang.reflect.Proxy to implement the client and reflection to implement the server part of the service.
 
 ## Maven
 
@@ -100,9 +100,9 @@ ServiceProxy.registerService(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInter
 });
 ~~~~
 
-The final parameter is an `ExceptionMapper` (functional Interface ) which can be used to map and exception to the method fail class. I use exceptions in the service implementation sometimes when things go wrong we can map specific exceptions to error. 
+The final parameter is an `ExceptionMapper` (functional Interface) which can be used to map and exception to the method fail class. I use exceptions in the service implementation sometimes when things go wrong, we can map specific exceptions to error codes. 
 
-Javascript does not support exception mapping
+Javascript does not support exception mapping for implemented services.
 
 ~~~~javascript
 
@@ -119,13 +119,13 @@ Javascript does not support exception mapping
 
 ### Creating a client
 
-User the createClient method of service proxy
+Use the createClient method of service proxy
 
 ~~~~java
        SampleInterface p = ServiceProxy.createClient(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class);
 ~~~~
 ~~~~javascript
-       var proxy = ServiceProxy.createClient(vertx, "some-test-address", com.odobo.vertx3.serviceproxy.SampleInterface.class);
+       var proxy = ServiceProxy.createClient(vertx, "some-proxy-address", com.odobo.vertx3.serviceproxy.SampleInterface.class);
 ~~~~
 
 ## Custom serialization
@@ -147,7 +147,7 @@ The class `CompletatbleFutureHandler` can be used to reduce callback hell.
 
 ## How it works
 
-The request is serialized to a Json specifying the method and the arguments in the java implementation this is done via an `InvocationHandler` in javascript it's done natively e.g.
+The request is serialized to a Json specifying the method and the arguments in the java implementation this is done via an `InvocationHandler`; in javascript it's done natively e.g.
 
 ~~~~json
 {
@@ -166,6 +166,8 @@ The request is serialized to a Json specifying the method and the arguments in t
 }
 ~~~~
 
+The serivce implementat part re-constitutes the the parameters, adds a ServiceHandler to the parameters and calls the method identifier.
+
 And the response is of the format:
 
 ~~~~json
@@ -178,3 +180,4 @@ And the response is of the format:
 }
 ~~~~
 
+When an Interface is passed to the register or create client functions, it is parsed to generate a ServiceMetaData object, this meta data is then used to create the request and responses.
