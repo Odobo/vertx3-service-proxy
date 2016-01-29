@@ -206,7 +206,9 @@ public class ServiceProxy {
             final MethodMeta methodData = this.metaData.getMeta(method);
 
             final JsonObject message = convertToRequest(methodData, args);
-            logger.debug("invoke:  {}", message);
+            if(logger.isDebugEnabled()) {
+                logger.debug("invoke:  " + message);
+            }
 
             final ServiceMetaData.Argument returnType = methodData.getReturnType();
             ServiceHandler sh = (ServiceHandler)args[args.length-1];
