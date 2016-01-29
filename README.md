@@ -27,6 +27,8 @@ To utilse this functionality use the maven artifact
 
 The dependency definitions are all in `provided` scope, so it should work with vert.x 3.1 onwards until the eventbus api changes.
 
+In javascript add the require `var ServiceProxy = require('js/serviceproxy-js/proxy');`
+
 ## How to use the functionality
 
 
@@ -106,7 +108,7 @@ Javascript does not support exception mapping for implemented services.
 
 ~~~~javascript
 
-    var service = ServiceProxy.registerService(vertx, "javascript-service", com.odobo.vertx3.serviceproxy.SampleInterface.class, {
+    ServiceProxy.registerService(vertx, "javascript-service", com.odobo.vertx3.serviceproxy.SampleInterface.class, {
         method1: function (str, int, obj, sh) {
             sh.ok(obj);
         },
@@ -122,7 +124,7 @@ Javascript does not support exception mapping for implemented services.
 Use the createClient method of service proxy
 
 ~~~~java
-       SampleInterface p = ServiceProxy.createClient(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class);
+       SampleInterface proxy = ServiceProxy.createClient(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class);
 ~~~~
 ~~~~javascript
        var proxy = ServiceProxy.createClient(vertx, "some-proxy-address", com.odobo.vertx3.serviceproxy.SampleInterface.class);
