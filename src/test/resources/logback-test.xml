@@ -1,0 +1,27 @@
+<configuration debug="false"  scan="true" scanPeriod="30 seconds">
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" >
+            <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%X] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="org.perf4j.TimingLogger" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="CoalescingStatistics"/>
+    </logger>
+
+
+    <logger name="com.odobo" level="trace"  />
+    <logger name="com.sun.jersey" level="info" />
+    <logger name="org.springframework.context" level="info" />
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
+
