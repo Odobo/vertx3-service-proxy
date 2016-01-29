@@ -67,7 +67,7 @@ public class JavascriptTest {
                 final SampleInterface proxy = ServiceProxy.createClient(vertx, "javascript-service", SampleInterface.class);
                 final SamplePojo samplePojo = new SamplePojo().setIntValue(123).setString("value").setJsonObject(new JsonObject().put("v", 1));
 
-                proxy.method1("string", 2, samplePojo, new ServiceHandler<SamplePojo>() {
+                proxy.method1(null, 2, samplePojo, new ServiceHandler<SamplePojo>() {
                     @Override
                     public void ok(final SamplePojo value) {
                         testContext.assertEquals(123, value.getIntValue());

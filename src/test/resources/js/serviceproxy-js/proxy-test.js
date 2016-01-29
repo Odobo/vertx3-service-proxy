@@ -58,7 +58,7 @@ exports.vertxStartAsync = function (future) {
                 logger.debug("Response is " + JSON.stringify(res));
                 testContext.assertEquals(obj1.string, res.string);
                 testContext.assertNull(err);
-                proxy.specialMethod1('str', obj1, function (res, err) {
+                proxy.specialMethod1(null, obj1, function (res, err) {
                     testContext.assertNotNull(res);
                     logger.debug("Response is " + JSON.stringify(res));
 
