@@ -257,7 +257,7 @@ public class ServiceProxy {
                 ServiceMetaData.Argument arg = methodMeta.getArguments().get(i);
                 final ProxyJsonSerializer serializer = arg.getSerializer();
                 if (args[i] == null) {
-                    arguments.add(new JsonObject());
+                    arguments.addNull();
                 } else {
                     arguments.add(serializer == null ? args[i] : serializer.toJson(args[i]));
                 }

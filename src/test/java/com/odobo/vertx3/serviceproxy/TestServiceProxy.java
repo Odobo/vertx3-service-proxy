@@ -69,7 +69,7 @@ public class TestServiceProxy {
         final SamplePojo samplePojo = new SamplePojo().setIntValue(123).setString("value").setJsonObject(new JsonObject().put("v", 1));
 
         CompletableFutureHandler<SamplePojo> cf = new CompletableFutureHandler<>();
-        p.method1("string", 3, samplePojo, cf.toHandler());
+        p.method1(null, 3, samplePojo, cf.toHandler());
 
         cf.whenComplete( (value, ex) ->{
             testContext.assertNull(ex);
