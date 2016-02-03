@@ -14,7 +14,7 @@ I originally used the https://github.com/vert-x3/vertx-service-proxy but got fru
 
 So taking inspriation from various client proxies from web service libraries, the code utilises java.lang.reflect.Proxy to implement the client and reflection to implement the server part of the service.
 
-**At the moment you cannot return implementations to other service as you can do with the vertx-service-proxy**
+**At the moment you cannot return implementations to other services as you can do with the vertx-service-proxy**
 
 ## Maven
 
