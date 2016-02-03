@@ -9,9 +9,12 @@ I originally used the https://github.com/vert-x3/vertx-service-proxy but got fru
 1. Only being able to use a restricted set of Types for parameters and return types
 1. Not being able to use Generic types
 1. Not being able to handle failures nicely, i.e. The generated class always returned -1 in the fail(), meaning I had to define my own templates
+1. Only being able to write implementations in Java
 
 
 So taking inspriation from various client proxies from web service libraries, the code utilises java.lang.reflect.Proxy to implement the client and reflection to implement the server part of the service.
+
+**At the moment you cannot return implementations to other service as you can do with the vertx-service-proxy**
 
 ## Maven
 
@@ -27,7 +30,7 @@ To utilse this functionality use the maven artifact
 
 The dependency definitions are all in `provided` scope, so it should work with vert.x 3.1 onwards until the eventbus api changes.
 
-In javascript add the require `var ServiceProxy = require('js/serviceproxy-js/proxy');`
+In javascript add the require `var ServiceProxy = require('js/com.odobo.vertx.serviceproxy-js/proxy');`
 
 ## How to use the functionality
 
@@ -108,7 +111,7 @@ Javascript does not support exception mapping for implemented services.
 
 ~~~~javascript
 
-    ServiceProxy.registerService(vertx, "javascript-service", com.odobo.vertx3.serviceproxy.SampleInterface.class, {
+    ServiceProxy.registerService(vertx, "javascript-service", com.odobo.vertx3.com.odobo.vertx.serviceproxy.SampleInterface.class, {
         method1: function (str, int, obj, sh) {
             sh.ok(obj);
         },
@@ -127,7 +130,7 @@ Use the createClient method of service proxy
        SampleInterface proxy = ServiceProxy.createClient(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class);
 ~~~~
 ~~~~javascript
-       var proxy = ServiceProxy.createClient(vertx, "some-proxy-address", com.odobo.vertx3.serviceproxy.SampleInterface.class);
+       var proxy = ServiceProxy.createClient(vertx, "some-proxy-address", com.odobo.vertx3.com.odobo.vertx.serviceproxy.SampleInterface.class);
 ~~~~
 
 ## Custom serialization
