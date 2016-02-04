@@ -241,7 +241,16 @@ public class ServiceProxy {
                         }
                     } else {
                         ReplyException re = (ReplyException) event.cause();
-                        sh.fail(re.failureCode(), new JsonObject(re.getMessage()));
+                        switch (re.failureType()) {
+                            case NO_HANDLERS:
+                            case TIMEOUT:
+                                sh.fail(re.failureCode(), new JsonObject().put("error", re.getMessage()));
+                                break;
+                            case RECIPIENT_FAILURE:
+                            default:
+                                sh.fail(re.failureCode(), new JsonObject(re.getMessage()));
+                                break;
+                        }
                     }
                 }
             });

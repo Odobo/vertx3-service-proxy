@@ -116,7 +116,6 @@ public class TestServiceProxy {
         @Override
         public void method1(final String string, final SamplePojo samplePojo, @ProxyObject( serializer = TestJsonSerializer.class) final ServiceHandler<SamplePojo> handler) {
             throw new RuntimeException("Hello");
-
         }
     }
 
