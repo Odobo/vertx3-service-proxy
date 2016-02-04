@@ -8,14 +8,19 @@ var ServiceProxy = function () {
 
 
 ServiceProxy.createClient = function (vertx, address, interfaceClass) {
-    return new ClientProxy(vertx, address, interfaceClass);
+    return new ClientProxy(vertx, address, {}, interfaceClass);
+};
+
+
+ServiceProxy.createClientWithOptions = function (vertx, address, options,  interfaceClass) {
+    return new ClientProxy(vertx, address, options, interfaceClass);
 };
 
 ServiceProxy.registerService = function (vertx, address, interfaceClass, impl) {
     return new EventBusService(vertx, address, interfaceClass, impl);
 };
 
-function ClientProxy(vertx, address, interfaceClass) {
+function ClientProxy(vertx, address, options,  interfaceClass) {
     var metaData = new com.odobo.vertx3.serviceproxy.meta.ServiceMetaData(interfaceClass);
     var eb = vertx.eventBus();
 
@@ -31,7 +36,7 @@ function ClientProxy(vertx, address, interfaceClass) {
             };
 
             var responseHandler = requestArgs[methodMeta.getArguments().size()];
-            eb.send(address, request, function (res, err) {
+            eb.send(address, request, options, function (res, err) {
 
                 if (err == null) {
                     responseHandler(res.body()['return'], null);

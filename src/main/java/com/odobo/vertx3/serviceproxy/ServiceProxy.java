@@ -11,6 +11,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.AsyncResultHandler;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.ReplyException;
@@ -50,9 +51,15 @@ public class ServiceProxy {
      */
     public static <T> T createClient(final Vertx vertx, final String address, final Class<T> clientInterface) {
 
+        return createClient(vertx, address, null, clientInterface);
+
+    }
+
+    public static <T> T createClient(final Vertx vertx, final String address, final DeliveryOptions options, final Class<T> clientInterface) {
+
         final ServiceMetaData serviceMetaData = new ServiceMetaData(clientInterface);
 
-        return (T) Proxy.newProxyInstance(clientInterface.getClassLoader(), new Class[]{clientInterface}, new ServiceProxyInvocationHandler(vertx, serviceMetaData, address));
+        return (T) Proxy.newProxyInstance(clientInterface.getClassLoader(), new Class[]{clientInterface}, new ServiceProxyInvocationHandler(vertx, serviceMetaData, address, options));
 
     }
 
@@ -191,11 +198,14 @@ public class ServiceProxy {
         private final Vertx vertx;
         private final String address;
         private final ServiceMetaData metaData;
+        private final DeliveryOptions options;
 
-        private ServiceProxyInvocationHandler(final Vertx vertx, final ServiceMetaData metaData, String address) {
+        private ServiceProxyInvocationHandler(final Vertx vertx, final ServiceMetaData metaData, String address, final DeliveryOptions options) {
             this.vertx = vertx;
             this.metaData = metaData;
             this.address = address;
+
+            this.options = options == null ? new DeliveryOptions() : options;
 
         }
 
@@ -213,7 +223,7 @@ public class ServiceProxy {
             final ServiceMetaData.Argument returnType = methodData.getReturnType();
             ServiceHandler sh = (ServiceHandler)args[args.length-1];
 
-            vertx.eventBus().send(address, message, new AsyncResultHandler<Message<JsonObject>>() {
+            vertx.eventBus().send(address, message, this.options,  new AsyncResultHandler<Message<JsonObject>>() {
                 @Override
                 public void handle(final AsyncResult<Message<JsonObject>> event) {
 
