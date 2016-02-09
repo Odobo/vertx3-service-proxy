@@ -170,12 +170,14 @@ public class ServiceProxy {
 
         @Override
         public void ok(final T value) {
-            final JsonObject returnValue = new JsonObject();
             if( value != null ) {
+                final JsonObject returnValue = new JsonObject();
                 Object o = serialiser == null ? value : serialiser.toJson(value);
                 returnValue.put(RETURN, o);
+                event.reply(returnValue);
+            } else {
+                event.reply(null);
             }
-            event.reply(returnValue);
         }
 
         @Override
@@ -228,7 +230,7 @@ public class ServiceProxy {
                 public void handle(final AsyncResult<Message<JsonObject>> event) {
 
                     if( event.succeeded() ) {
-                        if( returnType.getType().isAssignableFrom(Void.class)) {
+                        if( returnType.getType().isAssignableFrom(Void.class) || event.result() == null) {
                             sh.ok(null);
                         } else {
                             final ProxyJsonSerializer serializer = returnType.getSerializer();
