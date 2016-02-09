@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: plenderyou
@@ -18,11 +21,20 @@ public class TestServiceMetaData {
     @Test
     public void testIdentifier() throws Exception {
 
+        List<String> methodNames = new ArrayList<>();
+        methodNames.add("method1");
+        methodNames.add("specialMethod1");
+
         Method[] methods = SampleInterface.class.getDeclaredMethods();
-        String id = MethodMeta.identifierFromMethod(methods[0]);
-        Assert.assertEquals("method1", id);
-        id = MethodMeta.identifierFromMethod(methods[1]);
-        Assert.assertEquals("specialMethod1", id);
+        int cnt=0;
+        for(Method m : methods) {
+            if(Modifier.isStatic(m.getModifiers())) continue;
+            String id = MethodMeta.identifierFromMethod(m);
+            Assert.assertTrue(methodNames.contains(id));
+            cnt++;
+        }
+
+        Assert.assertEquals("Identified Methods", methodNames.size(), cnt);
     }
 
 

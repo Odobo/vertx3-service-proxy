@@ -3,6 +3,7 @@ package com.odobo.vertx3.serviceproxy.meta;
 import com.odobo.vertx3.serviceproxy.serializer.ProxyJsonSerializer;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class ServiceMetaData {
         final Method[] declaredMethods = serviceInterface.getDeclaredMethods();
 
         for (Method m : declaredMethods) {
+            if(Modifier.isStatic(m.getModifiers()) ) continue;
             MethodMeta mm = analyzeMethod(m);
             final MethodMeta oldMethod = methods.put(mm.identifier(), mm);
             if (oldMethod != null) {

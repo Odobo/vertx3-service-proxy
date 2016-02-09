@@ -23,12 +23,20 @@ public class EventBusTypes {
     static {
         eventBusTypes = new HashSet<>();
         eventBusTypes.add(String.class);
+        eventBusTypes.add(Buffer.class);
         eventBusTypes.add(JsonObject.class);
         eventBusTypes.add(JsonArray.class);
         eventBusTypes.add(byte[].class);
-        eventBusTypes.add(Buffer.class);
-    }
+        eventBusTypes.add(Integer.class);
+        eventBusTypes.add(Long.class);
+        eventBusTypes.add(Float.class);
+        eventBusTypes.add(Double.class);
+        eventBusTypes.add(Boolean.class);
+        eventBusTypes.add(Short.class);
+        eventBusTypes.add(Character.class);
+        eventBusTypes.add(Byte.class);
 
+    }
     public static void registerEventBusType(final Class<?> clazz) {
         eventBusTypes.add(clazz);
     }

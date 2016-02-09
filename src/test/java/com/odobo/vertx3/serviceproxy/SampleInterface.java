@@ -3,6 +3,7 @@ package com.odobo.vertx3.serviceproxy;
 import com.odobo.vertx3.serviceproxy.handler.ServiceHandler;
 import com.odobo.vertx3.serviceproxy.meta.MethodIdentifier;
 import com.odobo.vertx3.serviceproxy.meta.ProxyObject;
+import io.vertx.core.Vertx;
 
 /**
  * User: plenderyou
@@ -11,6 +12,10 @@ import com.odobo.vertx3.serviceproxy.meta.ProxyObject;
  */
 
 public interface SampleInterface {
+
+    static public SampleInterface createProxy(final Vertx vertx, final String address) {
+        return ServiceProxy.createClient(vertx, address, SampleInterface.class);
+    }
 
     void method1(final String string, final int intValue, final SamplePojo samplePojo, final ServiceHandler<SamplePojo> handler);
 
