@@ -230,7 +230,7 @@ public class ServiceProxy {
                 public void handle(final AsyncResult<Message<JsonObject>> event) {
 
                     if( event.succeeded() ) {
-                        if( returnType.getType().isAssignableFrom(Void.class) || event.result() == null) {
+                        if( returnType.getType().isAssignableFrom(Void.class) || event.result().body() == null) {
                             sh.ok(null);
                         } else {
                             final ProxyJsonSerializer serializer = returnType.getSerializer();
