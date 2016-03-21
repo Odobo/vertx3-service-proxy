@@ -10,6 +10,9 @@ exports.vertxStartAsync = function (future) {
         },
         specialMethod1: function (str, obj, sh) {
             sh.ok( { some: "crazy-object"});
+        },
+        noArguments: function(sh) {
+            sh.ok("SomeString");
         }
     });
 

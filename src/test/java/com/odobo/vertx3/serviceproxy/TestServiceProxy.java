@@ -30,7 +30,7 @@ public class TestServiceProxy {
     public void before(final TestContext context){
         this.vertx = Vertx.vertx();
         logger.debug("before: Registering service {} at {}", SampleInterface.class.getName(), SOME_SERVICE_PROXY_ADDRESS);
-        ServiceProxy.registerService(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class, new PingPongService(), (ex, msg)->{
+        ServiceProxy.registerService(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class, new PingPongService1(), (ex, msg)->{
             msg.fail(999, new JsonObject().put("error", "We got an exception " + ex.getMessage()));
         });
 
@@ -104,8 +104,33 @@ public class TestServiceProxy {
 
     }
 
+    @Test
+    public void testMethodWithNoParams(final TestContext testContext){
+        final Async async = testContext.async();
+        SampleInterface p = ServiceProxy.createClient(this.vertx, SOME_SERVICE_PROXY_ADDRESS, SampleInterface.class);
+        final SamplePojo samplePojo = new SamplePojo().setIntValue(123).setString("value").setJsonObject(new JsonObject().put("v", 1));
 
-    private static class PingPongService implements SampleInterface {
+        p.noArguments( new ServiceHandler<String>() {
+            @Override
+            public void ok(final String value) {
+                testContext.assertEquals(PingPongService1.SOME_STRING, value);
+                async.complete();
+
+            }
+
+            @Override
+            public void fail(final int errCode, final JsonObject context) {
+                testContext.fail();
+            }
+
+        });
+
+    }
+
+
+    private static class PingPongService1 implements SampleInterface {
+
+        public static final String SOME_STRING = "SomeString";
 
         @Override
         public void method1(final String string, final int intValue, final SamplePojo samplePojo, ServiceHandler<SamplePojo> handler) {
@@ -116,6 +141,11 @@ public class TestServiceProxy {
         @Override
         public void method1(final String string, final SamplePojo samplePojo, @ProxyObject( serializer = TestJsonSerializer.class) final ServiceHandler<SamplePojo> handler) {
             throw new RuntimeException("Hello");
+        }
+
+        @Override
+        public void noArguments(final ServiceHandler<String> handler) {
+            handler.ok(SOME_STRING);
         }
     }
 

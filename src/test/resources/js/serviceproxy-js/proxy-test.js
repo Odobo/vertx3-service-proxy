@@ -38,6 +38,9 @@ exports.vertxStartAsync = function (future) {
                 },
                 specialMethod1: function (str, obj, sh) {
                     sh.ok(obj);
+                },
+                noArguments: function(sh) {
+                    sh.ok("SomeString");
                 }
             }, function (ex, msg) {
                 msg.fail(-1, ex);
@@ -81,6 +84,9 @@ exports.vertxStartAsync = function (future) {
                 },
                 specialMethod1: function (str, obj, sh) {
                     sh.fail(100, obj);
+                },
+                noArguments: function(sh) {
+                    sh.ok("SomeString");
                 }
             }, function (ex, msg) {
                 msg.fail(-1, ex);

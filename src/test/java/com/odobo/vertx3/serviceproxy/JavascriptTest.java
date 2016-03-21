@@ -2,7 +2,6 @@ package com.odobo.vertx3.serviceproxy;
 
 import com.odobo.vertx3.serviceproxy.handler.FailHandler;
 import com.odobo.vertx3.serviceproxy.handler.ServiceHandler;
-import com.odobo.vertx3.serviceproxy.meta.ProxyObject;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -117,16 +116,5 @@ public class JavascriptTest {
         });
     }
 
-    private class PingPongService implements SampleInterface{
 
-        @Override
-        public void method1(final String string, final int intValue, final SamplePojo samplePojo, final ServiceHandler<SamplePojo> handler) {
-            handler.ok(samplePojo);
-        }
-
-        @Override
-        public void method1(final String string, @ProxyObject(serializer = TestJsonSerializer.class) final SamplePojo samplePojo, final ServiceHandler<SamplePojo> handler) {
-            handler.ok(samplePojo);
-        }
-    }
 }

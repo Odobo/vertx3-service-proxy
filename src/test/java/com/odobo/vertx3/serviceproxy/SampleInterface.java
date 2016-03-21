@@ -21,4 +21,6 @@ public interface SampleInterface {
 
     @MethodIdentifier("specialMethod1")
     void method1(final String string, @ProxyObject( serializer = TestJsonSerializer.class) final SamplePojo samplePojo, final ServiceHandler<SamplePojo> handler);
+
+    void noArguments(final ServiceHandler<String> handler);
 }

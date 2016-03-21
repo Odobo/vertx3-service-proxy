@@ -24,13 +24,14 @@ public class TestServiceMetaData {
         List<String> methodNames = new ArrayList<>();
         methodNames.add("method1");
         methodNames.add("specialMethod1");
+        methodNames.add("noArguments");
 
         Method[] methods = SampleInterface.class.getDeclaredMethods();
         int cnt=0;
         for(Method m : methods) {
             if(Modifier.isStatic(m.getModifiers())) continue;
             String id = MethodMeta.identifierFromMethod(m);
-            Assert.assertTrue(methodNames.contains(id));
+            Assert.assertTrue("Method should contain" + id,  methodNames.contains(id));
             cnt++;
         }
 
@@ -43,10 +44,11 @@ public class TestServiceMetaData {
 
         ServiceMetaData smd = new ServiceMetaData(SampleInterface.class);
 
-        Assert.assertEquals(2, smd.getMethods().size());
-        Method[] methods = SampleInterface.class.getDeclaredMethods();
+        Assert.assertEquals(3, smd.getMethods().size());
 
-        MethodMeta meta = smd.getMeta(methods[0]);
+
+
+        MethodMeta meta = smd.getMeta("method1");
 
         Assert.assertNotNull(meta);
 
@@ -67,12 +69,19 @@ public class TestServiceMetaData {
         Assert.assertEquals(SamplePojo.class, argument.getType());
         Assert.assertEquals(DefaultJsonSerializer.class, argument.getSerializer().getClass());
 
-        meta = smd.getMeta(methods[1]);
+        meta = smd.getMeta("specialMethod1");
         Assert.assertEquals("specialMethod1", meta.identifier());
 
         argument = meta.getArguments().get(1);
         Assert.assertEquals(SamplePojo.class, argument.getType());
         Assert.assertEquals(TestJsonSerializer.class, argument.getSerializer().getClass());
+
+
+        meta = smd.getMeta("noArguments");
+        Assert.assertEquals("noArguments", meta.identifier());
+
+        Assert.assertEquals(0, meta.getArguments().size());
+
 
     }
 }

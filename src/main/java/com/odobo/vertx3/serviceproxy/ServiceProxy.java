@@ -138,6 +138,7 @@ public class ServiceProxy {
 
             final List<Object> arguments = new ArrayList<>();
             final JsonArray argumentArray = request.getJsonArray(ARGUMENTS);
+
             for(int i=0; i<method.getArguments().size(); i++) {
                 ServiceMetaData.Argument arg = method.getArguments().get(i);
                 final ProxyJsonSerializer serializer = arg.getSerializer();
