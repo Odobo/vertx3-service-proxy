@@ -16,9 +16,8 @@ import java.util.List;
  * User: plenderyou
  * Date: 11/12/2015
  * Time: 4:50 PM
- *
+ * <p>
  * Holds meta-data about methods
- *
  */
 public class MethodMeta {
     private final String identifier;
@@ -65,7 +64,9 @@ public class MethodMeta {
         final ParameterizedType t = (ParameterizedType) genericParameterTypes[genericParameterTypes.length - 1];
         final Class<?> returnType;
         try {
-            returnType = Class.forName(t.getActualTypeArguments()[0].getTypeName());
+            returnType = Thread.currentThread().getContextClassLoader().loadClass(t.getActualTypeArguments()[0].getTypeName());
+
+            //returnType = Class.forName(t.getActualTypeArguments()[0].getTypeName());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
